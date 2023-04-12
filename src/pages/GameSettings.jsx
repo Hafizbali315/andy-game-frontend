@@ -4,29 +4,54 @@ import api from './../utils/api'
 
 import Instructions from '../components/Instructions'
 import ScreenQuestions from '../components/ScreenQuestions'
+import axios from 'axios'
+import { ThreeDots } from 'react-loader-spinner'
 
 const GameSettings = () => {
-	console.log('import.meta.env.BASE_URL', import.meta.env.BASE_URL)
 	const userId = localStorage.getItem('userId')
 
 	const [newSettings, setNewSettings] = useState({
 		avatarToggler: false,
 		instructionMessages: [],
-		soundFile: null,
+		soundFile: '',
 		screenQuestions: [],
 		coinEarnings: 0,
 		playLimit: 0,
 	})
 
+	const [loading, setLoading] = useState(false)
+
 	const handleAvatarToggler = (checked) => {
 		setNewSettings((prevSettings) => ({ ...prevSettings, avatarToggler: checked }))
 	}
 
-	const handleBgSound = (e) => {
+	const handleBgSound = async (e) => {
 		e.preventDefault()
 
 		const file = e.target.files[0]
-		setNewSettings((prevSettings) => ({ ...prevSettings, soundFile: file }))
+
+		const formData = new FormData()
+		formData.append('file', file)
+		formData.append('upload_preset', 'i0b6ixhf')
+		formData.append('resource_type', 'video') // Audio files are considered 'video' in Cloudinary
+
+		if (file) {
+			setLoading(true)
+		}
+
+		try {
+			const res = await axios.post(`https://api.cloudinary.com/v1_1/bilal-cloud/upload`, formData)
+			console.log('res', res.data.secure_url)
+
+			if (res.data.secure_url !== '') {
+				setNewSettings((prevSettings) => ({ ...prevSettings, soundFile: res.data.secure_url }))
+				setLoading(false)
+				alert('Sound file uploaded successfully')
+			}
+		} catch (error) {
+			console.error(error)
+			alert('Error uploading image:', error)
+		}
 	}
 
 	const handleSettings = async () => {
@@ -35,16 +60,18 @@ const GameSettings = () => {
 		}
 
 		const formData = new FormData()
-		formData.append('userId', userId)
 		formData.append('avatarToggler', newSettings.avatarToggler)
 		formData.append('instructionMessages', JSON.stringify(newSettings.instructionMessages))
-		formData.append('audioFile', newSettings.soundFile)
+		formData.append('soundFile', newSettings.soundFile)
 		formData.append('screenQuestions', JSON.stringify(newSettings.screenQuestions))
 		formData.append('coinEarnings', newSettings.coinEarnings)
 		formData.append('playLimit', newSettings.playLimit)
 
+		const formDataObj = Object.fromEntries(formData.entries())
+		console.log('formDataObj', formDataObj)
+
 		try {
-			const res = await api.post('/api/settings/user-settings', formData)
+			const res = await api.post('/api/settings/user-settings', formDataObj)
 			if (res.data) {
 				alert('Settings Saved Successfully')
 			}
@@ -64,6 +91,9 @@ const GameSettings = () => {
 
 	return (
 		<div className="settings">
+			<h2>Game Settings</h2>
+
+			{/* Avatar Option */}
 			<div className="avatar-option">
 				{/* Avatar Option Settings */}
 				<h3>Can user customize the Avatar?</h3>
@@ -88,6 +118,20 @@ const GameSettings = () => {
 			<div className="bg-sound">
 				<h3>Upload Background Sound</h3>
 				<input type="file" onChange={handleBgSound} accept="audio/*" />
+				{loading && (
+					<div className="loader">
+						<ThreeDots
+							height="80"
+							width="80"
+							radius="9"
+							color="#4fa94d"
+							ariaLabel="three-dots-loading"
+							wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}
+							wrapperClassName=""
+							visible={true}
+						/>
+					</div>
+				)}
 			</div>
 
 			{/* Setting what should be Seen on the screen */}

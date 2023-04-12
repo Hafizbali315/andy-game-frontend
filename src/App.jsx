@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { ProtectedRoute } from './components/PrivateRoute'
-import Dashboard from './pages/Dashboard'
+import Layout from './pages/Layout'
+import GameSettings from './pages/GameSettings'
+import ShopItems from './pages/ShopItems'
 
 const App = () => {
 	return (
@@ -16,19 +18,16 @@ const App = () => {
 						path=""
 						element={
 							<ProtectedRoute>
-								<Dashboard />
+								<Layout />
 							</ProtectedRoute>
 						}
-					/>
+					>
+						<Route index element={<GameSettings />} />
+						<Route path="/settings" element={<GameSettings />} />
+						<Route path="/shop-items" element={<ShopItems />} />
+					</Route>
 
-					<Route
-						path="/dashboard"
-						element={
-							<ProtectedRoute>
-								<Dashboard />
-							</ProtectedRoute>
-						}
-					/>
+					<Route path="*" element={<div>404 Not Found</div>} />
 				</Routes>
 			</Router>
 		</div>

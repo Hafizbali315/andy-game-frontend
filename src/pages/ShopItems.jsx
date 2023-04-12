@@ -108,62 +108,73 @@ const ShopItems = () => {
 
 	return (
 		<div className="shop-itmes">
-			<h1>Shop Items</h1>
-			<form className="form" onSubmit={handleSubmit}>
-				<div className="input-container">
-					<label htmlFor="">Item Name</label>
-					<input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
-				</div>
+			<h2>Shop Items</h2>
+			<div className="container">
+				<form className="form" onSubmit={handleSubmit}>
+					<div className="input-container">
+						<label htmlFor="">Item Name</label>
+						<input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
+					</div>
 
-				<div className="input-container">
-					<label htmlFor="">Item Description</label>
-					<textarea name="description" placeholder="Description" value={form.description} onChange={handleChange}></textarea>
-				</div>
+					<div className="input-container">
+						<label htmlFor="">Item Description</label>
+						<textarea name="description" placeholder="Description" value={form.description} onChange={handleChange}></textarea>
+					</div>
 
-				<div className="input-container">
-					<label htmlFor="">Item Price</label>
-					<input name="price" placeholder="Price" type="number" value={form.price} onChange={handleChange} />
-				</div>
+					<div className="input-container">
+						<label htmlFor="">Item Price</label>
+						<input name="price" placeholder="Price" type="number" value={form.price} onChange={handleChange} />
+					</div>
 
-				<div className="input-container">
-					<label htmlFor="">Item Category</label>
-					<input name="category" placeholder="Category" value={form.category} onChange={handleChange} />
-				</div>
+					<div className="input-container">
+						<label htmlFor="">Item Category</label>
+						<input name="category" placeholder="Category" value={form.category} onChange={handleChange} />
+					</div>
 
-				<div className="input-container">
-					<label htmlFor="">Item Icon</label>
-					<input name="iconImage" type="file" accept="image/*" onChange={handleFileChange} />
-					{loading ? (
-						<div className="loader">
-							<ThreeDots
-								height="80"
-								width="80"
-								radius="9"
-								color="#4fa94d"
-								ariaLabel="three-dots-loading"
-								wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}
-								wrapperClassName=""
-								visible={true}
-							/>
-						</div>
-					) : (
-						form.iconUrl && <Image cloudName="bilal-cloud" publicId={form.iconPubId} />
-					)}
-				</div>
+					<div className="input-container">
+						<label htmlFor="">Item Icon</label>
+						<input name="iconImage" type="file" accept="image/*" onChange={handleFileChange} />
+						{loading ? (
+							<div className="loader">
+								<ThreeDots
+									height="80"
+									width="80"
+									radius="9"
+									color="#4fa94d"
+									ariaLabel="three-dots-loading"
+									wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}
+									wrapperClassName=""
+									visible={true}
+								/>
+							</div>
+						) : (
+							form.iconUrl && (
+								<div className="img-container">
+									<Image className="img" cloudName="bilal-cloud" publicId={form.iconPubId} />
+								</div>
+							)
+						)}
+					</div>
 
-				<button type="submit">{selectedItem ? 'Update' : 'Add'} Item</button>
-			</form>
+					<button type="submit">{selectedItem ? 'Update' : 'Add'} Item</button>
+				</form>
+			</div>
 
-			<ul>
+			<ul className="items_list">
 				{shopItems.map((item) => (
 					<li key={item._id}>
-						<h2>{item.name}</h2>
-						<p>{item.description}</p>
+						<h3>{item.name}</h3>
+						<h4>{item.description}</h4>
 						<p>Price: {item.price}</p>
 						<p>Category: {item.category}</p>
-						<Image cloudName="bilal-cloud" publicId={item.iconPubId} />
-						<button onClick={() => handleEdit(item)}>Edit</button>
-						<button onClick={() => handleDelete(item._id)}>Delete</button>
+						<div className="img-container">
+							<Image className="img" cloudName="bilal-cloud" publicId={item.iconPubId} />
+						</div>
+
+						<div className="btns">
+							<button onClick={() => handleEdit(item)}>Edit</button>
+							<button onClick={() => handleDelete(item._id)}>Delete</button>
+						</div>
 					</li>
 				))}
 			</ul>

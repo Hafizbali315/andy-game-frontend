@@ -36,7 +36,7 @@ const Signup = () => {
 					const res = await api.post('/api/auth/signup', values)
 
 					localStorage.setItem('token', res.data.token)
-					navigate('/dashboard')
+					navigate('/')
 				} catch (err) {
 					console.error(err.message)
 				}

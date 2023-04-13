@@ -14,7 +14,7 @@ const Login = () => {
 			console.log(res)
 			localStorage.setItem('token', res.data.token)
 			localStorage.setItem('userId', res.data.user.id)
-			navigate('/dashboard')
+			navigate('/')
 		} catch (err) {
 			console.error(err.message)
 			alert('Invalid Credentials')
@@ -26,7 +26,7 @@ const Login = () => {
 		const isAuthenticated = localStorage.getItem('token')
 
 		if (isAuthenticated) {
-			navigate('/dashboard')
+			navigate('/')
 		}
 	}, [])
 

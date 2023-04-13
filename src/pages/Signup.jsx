@@ -11,7 +11,7 @@ const Signup = () => {
 		const isAuthenticated = localStorage.getItem('token')
 
 		if (isAuthenticated) {
-			navigate('/dashboard')
+			navigate('/')
 		}
 	}, [])
 

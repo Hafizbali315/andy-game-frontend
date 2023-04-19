@@ -6,6 +6,7 @@ import Instructions from '../components/Instructions'
 import ScreenQuestions from '../components/ScreenQuestions'
 import axios from 'axios'
 import { ThreeDots } from 'react-loader-spinner'
+import ScreenUrls from '../components/ScreenUrls'
 
 const GameSettings = () => {
 	const userId = localStorage.getItem('userId')
@@ -17,6 +18,7 @@ const GameSettings = () => {
 		screenQuestions: [],
 		coinEarnings: 0,
 		playLimit: 0,
+		screenUrls: {},
 	})
 
 	const [loading, setLoading] = useState(false)
@@ -66,6 +68,7 @@ const GameSettings = () => {
 		formData.append('screenQuestions', JSON.stringify(newSettings.screenQuestions))
 		formData.append('coinEarnings', newSettings.coinEarnings)
 		formData.append('playLimit', newSettings.playLimit)
+		formData.append('screenUrls', JSON.stringify(newSettings.screenUrls))
 
 		const formDataObj = Object.fromEntries(formData.entries())
 		console.log('formDataObj', formDataObj)
@@ -158,6 +161,12 @@ const GameSettings = () => {
 					value={newSettings.playLimit}
 					onChange={(e) => setNewSettings((prevSettings) => ({ ...prevSettings, playLimit: e.target.value }))}
 				/>
+			</div>
+
+			{/* URLS */}
+			<div className="urls">
+				<h3>Add URLS for different screens</h3>
+				<ScreenUrls newSettings={newSettings} setNewSettings={setNewSettings} />
 			</div>
 
 			<button className="submit_settings_btn" onClick={handleSettings}>

@@ -19,6 +19,7 @@ const GameSettings = () => {
 		coinEarnings: 0,
 		playLimit: 0,
 		screenUrls: {},
+		date: '',
 	})
 
 	const [loading, setLoading] = useState(false)
@@ -69,12 +70,13 @@ const GameSettings = () => {
 		formData.append('coinEarnings', newSettings.coinEarnings)
 		formData.append('playLimit', newSettings.playLimit)
 		formData.append('screenUrls', JSON.stringify(newSettings.screenUrls))
+		formData.append('date', newSettings.date)
 
 		const formDataObj = Object.fromEntries(formData.entries())
 		console.log('formDataObj', formDataObj)
 
 		try {
-			const res = await api.post('/api/settings/user-settings', formDataObj)
+			const res = await api.post('/api/settings', formDataObj)
 			if (res.data) {
 				alert('Settings Saved Successfully')
 			}
@@ -84,7 +86,7 @@ const GameSettings = () => {
 	}
 
 	const fetchSettings = async () => {
-		const res = await api.post(`/api/settings/user-settings/${userId}`)
+		const res = await api.get(`/api/settings`)
 		console.log('res.data', res.data)
 	}
 
@@ -167,6 +169,16 @@ const GameSettings = () => {
 			<div className="urls">
 				<h3>Add URLS for different screens</h3>
 				<ScreenUrls newSettings={newSettings} setNewSettings={setNewSettings} />
+			</div>
+
+			{/* Showcase date */}
+			<div className="date">
+				<h3>Date</h3>
+				<input
+					type="date"
+					value={newSettings.date}
+					onChange={(e) => setNewSettings((prevSettings) => ({ ...prevSettings, date: e.target.value }))}
+				/>
 			</div>
 
 			<button className="submit_settings_btn" onClick={handleSettings}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const ScreenUrls = ({ newSettings, setNewSettings }) => {
-	const [urls, setUrls] = useState({ url1: '', url2: '', url3: '', url4: '' })
+	const [urls, setUrls] = useState({ url1: '', url2: '', url3: '', url4: '', url5: '' })
 
 	const handleUrlChange = (e) => {
 		e.preventDefault()
@@ -31,6 +31,10 @@ const ScreenUrls = ({ newSettings, setNewSettings }) => {
 			<div className="input-container">
 				<label htmlFor="">URL 4</label>
 				<input type="text" name="url4" value={urls.url4} onChange={handleUrlChange} />
+			</div>
+			<div className="input-container">
+				<label htmlFor="">URL 5</label>
+				<input type="text" name="url5" value={urls.url5} onChange={handleUrlChange} />
 			</div>
 
 			<button onClick={handleSaveUrls}>Save</button>
